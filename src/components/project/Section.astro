@@ -1,0 +1,49 @@
+---
+/** 프로젝트 본문 섹션 — id는 목차와 공유 링크(#id)에 쓰인다. */
+interface Props {
+  id: string;
+  n: number;
+  title: string;
+}
+const { id, n, title } = Astro.props;
+---
+
+<section class="p-section" id={id} aria-labelledby={`${id}-title`}>
+  <h2 id={`${id}-title`} class="p-section__title">
+    <span class="p-section__n" aria-hidden="true">{String(n).padStart(2, '0')}</span>
+    {title}
+  </h2>
+  <div class="p-section__body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .p-section {
+    padding-block: var(--space-7);
+    border-top: 1px solid var(--border);
+  }
+  .p-section__title {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+  .p-section__n {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+  }
+  .p-section__body > :global(p),
+  .p-section__body > :global(ul),
+  .p-section__body > :global(ol) {
+    max-width: var(--text-max);
+  }
+  .p-section__body > :global(* + *) {
+    margin-top: var(--space-4);
+  }
+  .p-section__body :global(li + li) {
+    margin-top: var(--space-2);
+  }
+</style>

@@ -33,7 +33,7 @@ BASE_PATH=/저장소이름 npm run build && npm run preview
 | 단계 | 범위 | 상태 |
 | --- | --- | --- |
 | STEP 01 | 정보 구조, 디자인 토큰, 공통 레이아웃, 홈, 소개 | 완료 |
-| STEP 02 | 프로젝트 상세 3개, 인터랙티브 데모 3종 | — |
+| STEP 02 | 프로젝트 상세 3개, 인터랙티브 데모 3종 | 완료 |
 | STEP 03 | 나의 설계 방식, 관찰과 탐구, 품질 점검, 출시 | — |
 
 ## 채워야 할 내용
@@ -45,3 +45,18 @@ grep -rn "Todo\|TODO" src
 ```
 
 - `src/data/site.ts` — 공개할 이메일·링크드인, 실제 사용한 도구(`verified`), 이력서 PDF
+- `src/content/projects/*.mdx` — 작업 기간·개인/팀·진행 상태(frontmatter의 `null`), 관찰 기록, 실제 수정 과정
+- `src/data/demos/*.ts` — 데모 문구(기내 상황·역할극 대본, 승차 단계별 접점 역할, 핫스팟 설명)는 PRD 구조에 맞춘 **예시 초안**입니다
+- 대표 이미지: `src/components/ProjectThumb.astro`의 도식을 실제 결과 시안 이미지로 교체
+
+## 프로젝트 페이지 구조
+
+`src/content/projects/<slug>.mdx` 하나가 `/projects/<slug>` 한 페이지입니다. 개요(1)는 frontmatter로 자동 생성되고, 본문은 `<Section id="problem|evidence|decisions|experience|before-after|learned">` 순서로 씁니다.
+
+| 컴포넌트 | 용도 |
+| --- | --- |
+| `Evidence` | 관찰과 근거 카드 |
+| `Decision` | 선택 vs 검토한 대안 + 이유 |
+| `DemoBlock` | 데모 + 항상 보이는 텍스트 요약 |
+| `Case` | 개선 전후 사례 — `id`가 공유·가치 카드용 앵커 |
+| `Hypothesis` | 측정하지 않은 개선안의 ‘개선 가설’ (변경·예상 효과·확인 방법) |

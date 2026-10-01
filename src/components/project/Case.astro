@@ -1,0 +1,105 @@
+---
+/**
+ * '개선 전후' 수정 사례 하나. id는 고유 앵커 — '나의 설계 방식' 가치 카드가 /projects/<slug>#<id> 로 연결한다 (P-8).
+ */
+interface Props {
+  id: string;
+  title: string;
+  before: string;
+  after: string;
+  /** 이 수정에서 드러나는 가치 (STEP 03 양방향 연결용) */
+  values?: string[];
+  /** 남은 자료로 재구성한 비교인지 */
+  reconstructed?: boolean;
+}
+const { id, title, before, after, values = [], reconstructed = false } = Astro.props;
+---
+
+<article class="case card" id={id} aria-labelledby={`${id}-title`}>
+  <header class="case__head">
+    <h3 id={`${id}-title`}>{title}</h3>
+    <div class="badge-row">
+      {values.map((v) => <span class="badge badge--lavender">{v}</span>)}
+      {reconstructed && <span class="badge badge--outline">재구성</span>}
+    </div>
+  </header>
+  <div class="case__ba">
+    <div class="case__side">
+      <p class="case__label">수정 전</p>
+      <p>{before}</p>
+    </div>
+    <span class="case__arrow" aria-hidden="true">→</span>
+    <div class="case__side case__side--after">
+      <p class="case__label">수정 후</p>
+      <p>{after}</p>
+    </div>
+  </div>
+  <div class="case__why">
+    <p class="case__label">수정 이유</p>
+    <slot />
+  </div>
+  <a class="case__permalink caption" href={`#${id}`}>이 사례 링크</a>
+</article>
+
+<style>
+  .case {
+    display: grid;
+    gap: var(--space-4);
+  }
+  .case__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+  }
+  .case__head h3 {
+    font-size: 19px;
+  }
+  .case__ba {
+    display: grid;
+    gap: var(--space-3);
+  }
+  @media (min-width: 768px) {
+    .case__ba {
+      grid-template-columns: 1fr auto 1fr;
+    }
+  }
+  .case__arrow {
+    align-self: center;
+    justify-self: center;
+    font-size: 20px;
+    color: var(--text-secondary);
+    rotate: 90deg;
+  }
+  @media (min-width: 768px) {
+    .case__arrow {
+      rotate: none;
+    }
+  }
+  .case__side {
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-control);
+    border: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .case__side--after {
+    background: var(--accent-blue-soft);
+    border-color: var(--accent-blue);
+  }
+  .case__label {
+    font-size: var(--fs-caption);
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: 2px;
+  }
+  .case__why > :global(* + *) {
+    margin-top: var(--space-3);
+  }
+  .case__permalink {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch);
+  }
+</style>

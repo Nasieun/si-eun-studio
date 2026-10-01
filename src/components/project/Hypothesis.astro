@@ -1,0 +1,48 @@
+---
+/** '개선 가설' 표기 — 실제로 측정하지 않은 개선안에 반드시 붙인다 (PRD STEP 02 · 2.2) */
+interface Props {
+  change: string;
+  effect: string;
+  method: string;
+}
+const { change, effect, method } = Astro.props;
+---
+
+<aside class="hyp" aria-label="개선 가설">
+  <span class="badge badge--hypothesis">개선 가설</span>
+  <dl>
+    <div><dt>변경</dt><dd>{change}</dd></div>
+    <div><dt>예상 효과</dt><dd>{effect}</dd></div>
+    <div><dt>확인 방법</dt><dd>{method}</dd></div>
+  </dl>
+</aside>
+
+<style>
+  .hyp {
+    display: grid;
+    gap: var(--space-3);
+    justify-items: start;
+    padding: var(--space-4);
+    border-radius: var(--radius-control);
+    border: 1px dashed #8f84c4;
+    background: #f7f5fc;
+    max-width: var(--text-max);
+  }
+  dl {
+    margin: 0;
+    display: grid;
+    gap: var(--space-2);
+    font-size: 15px;
+  }
+  dl > div {
+    display: grid;
+    grid-template-columns: 5.5em 1fr;
+    gap: var(--space-2);
+  }
+  dt {
+    font-weight: 700;
+  }
+  dd {
+    margin: 0;
+  }
+</style>

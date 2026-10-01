@@ -2,8 +2,117 @@
 title: "광고 속 주의와 지각 — 앱 경험 분석"
 order: 3
 question: "많은 정보 속에서 중요한 내용은 어떻게 눈에 들어올까?"
-summary: "쇼핑 앱 화면을 주의·지각 이론으로 분석하고 개선안을 제안"
-placeholder: true
+summary: "쇼핑 앱 두 곳의 화면을 노출·감각 순응·주의·지각 이론으로 분석하고, 중요한 정보가 눈에 들어오도록 개선안을 제안했어요."
+contribution: "사용자 반응 관찰, 이론 적용 분석, 개선안 도출과 시안"
+skills: ["사용자 반응 관찰", "이론 적용", "개선안 도출"]
+purpose: "앱 속 광고·혜택 정보가 사용자에게 실제로 어떻게 받아들여지는지 이론으로 설명하고 개선 방향 찾기"
+audience: "쇼핑 앱에서 상품과 혜택을 탐색하는 사용자"
+period: null
+team: null
+role: ["화면 관찰과 분석", "이론 적용", "개선 제안 시안"]
+status: null
+aiUsage: ["웹사이트 구현", "초안 정리"]
 ---
 
-이 프로젝트의 상세 내용은 STEP 02에서 채워집니다.
+{/* TODO: 본문은 PRD 구조에 맞춘 초안입니다. 〔작성 필요〕 표시와 데모 데이터(src/data/demos/adAttention.ts)를 실제 분석 내용으로 교체하세요. */}
+
+import Section from '../../components/project/Section.astro';
+import Evidence from '../../components/project/Evidence.astro';
+import Decision from '../../components/project/Decision.astro';
+import Hypothesis from '../../components/project/Hypothesis.astro';
+import Case from '../../components/project/Case.astro';
+import DemoBlock from '../../components/project/DemoBlock.astro';
+import Todo from '../../components/Todo.astro';
+import AdHotspots from '../../components/demos/AdHotspots.tsx';
+
+<Section id="problem" n={2} title="문제 발견">
+
+쇼핑 앱을 열면 배너, 할인 배지, 쿠폰, 추천 상품이 한꺼번에 쏟아져요. 그런데 이렇게 많은 정보가 있는데도 정작 ‘가장 큰 혜택이 뭔지’, ‘실제로 얼마를 내는지’는 바로 눈에 들어오지 않았어요.
+
+정보가 화면에 있다고 해서 사용자가 보는 것은 아니에요. 어떤 정보는 눈에 닿기만 하고 처리되지 않고, 어떤 정보는 너무 자주 반복돼서 더는 느껴지지 않아요. 이 차이를 이론으로 설명해 보고 싶었어요.
+
+</Section>
+
+<Section id="evidence" n={3} title="관찰과 근거">
+
+<div class="grid">
+  <Evidence kind="수업 이론" title="노출과 감각 순응">
+    <p><strong>노출</strong>은 정보가 감각 기관에 닿는 단계예요. 닿았다고 해서 모두 처리되는 것은 아니에요.</p>
+    <p><strong>감각 순응</strong>은 같은 자극이 반복되면 점점 덜 느끼게 되는 현상이에요. 모든 상품에 붙은 같은 배지가 여기에 해당해요.</p>
+  </Evidence>
+  <Evidence kind="수업 이론" title="주의와 지각">
+    <p><strong>주의</strong>는 수많은 자극 중 일부를 골라 처리하는 과정이에요. 크고, 움직이고, 대비가 강한 것이 먼저 선택돼요.</p>
+    <p><strong>지각</strong>은 고른 정보를 묶고 해석하는 과정이에요. 비슷한 크기·색은 같은 무리로 보여서 위계가 없으면 핵심을 찾기 어려워요.</p>
+  </Evidence>
+  <Evidence kind="관찰" title="사용자 반응">
+    <p><Todo label="실제로 관찰한 사용자 반응(누가, 어떤 화면에서, 무엇을 놓쳤는지)으로 교체" /></p>
+  </Evidence>
+</div>
+
+</Section>
+
+<Section id="decisions" n={4} title="핵심 결정">
+
+<div style="display:grid;gap:16px">
+  <Decision title="분석 대상" chosen="성격이 다른 두 앱 — 올리브영(노출·감각 순응), 무신사(주의·지각)" alternative="한 앱의 여러 화면을 분석">
+    <p>두 앱이 정보를 쌓는 방식이 달라서, 서로 다른 이론이 각각 더 잘 설명된다고 봤어요. 하나의 주제 아래 두 관점을 비교할 수 있어요.</p>
+  </Decision>
+  <Decision title="표현 방식" chosen="실제 캡처 대신 구조를 단순화한 재현 화면 + 출처 표기" alternative="원본 화면 캡처를 그대로 게시">
+    <p>타사 화면을 분석·비평 목적의 최소한으로 인용하고, 분석에 필요한 구조만 남겨 핵심이 더 잘 보이게 했어요.</p>
+  </Decision>
+</div>
+
+</Section>
+
+<Section id="experience" n={5} title="결과 체험">
+
+사례 탭을 고르고, 화면 위 번호를 눌러 보세요. ‘기존 화면 / 개선 제안’을 바꾸면 무엇이 달라지는지 비교할 수 있어요.
+
+<DemoBlock title="핫스팟으로 보는 주의와 지각" draftNote="핫스팟 위치와 설명은 분석 구조를 보여 주는 예시 초안이에요. 실제 분석 내용으로 교체가 필요해요.">
+  <AdHotspots client:visible />
+  <Fragment slot="summary">
+    <p><strong>올리브영 · 노출과 감각 순응</strong></p>
+    <ul>
+      <li>자동으로 넘어가는 배너는 눈에 닿지만 끝까지 읽히지 않아요.</li>
+      <li>모든 상품의 같은 할인 배지는 반복돼서 더는 눈에 띄지 않아요.</li>
+    </ul>
+    <p style="margin-top:12px"><strong>무신사 · 주의와 지각</strong></p>
+    <ul>
+      <li>큰 상품 사진이 주의를 먼저 가져가요.</li>
+      <li>비슷한 크기의 가격 여러 개 때문에 실제 결제 금액이 바로 보이지 않아요.</li>
+    </ul>
+  </Fragment>
+</DemoBlock>
+
+</Section>
+
+<Section id="before-after" n={6} title="개선 전후">
+
+<div style="display:grid;gap:16px">
+
+<Case id="case-ad-badge" title="할인 배지를 줄이고 차별화" values={['열정']} before="거의 모든 상품에 같은 색·모양의 할인 배지" after="일반 할인은 글자로, 특별 혜택에만 다른 모양의 배지">
+  <p>수업에서 배운 감각 순응 개념을 실제 앱 화면에 적용해 보니, ‘강조가 많을수록 강조가 사라진다’는 점이 보였어요. 반복을 줄여 남은 배지가 다시 눈에 띄게 했어요.</p>
+  <Hypothesis change="할인 배지를 특별 혜택에만 남기고 모양을 차별화" effect="사용자가 특별 혜택을 더 빨리 알아차림" method="5명에게 두 화면을 보여 주고 “가장 큰 혜택 찾기” 소요 시간과 정답률 비교" />
+</Case>
+
+<Case id="case-ad-price" title="최종가를 가장 크게" values={['한결같음']} before="정가·할인율·쿠폰가·최종가가 비슷한 크기로 나열" after="최종가를 가장 크고 굵게, 나머지는 작게 보조로">
+  <p>사용자가 가격 영역에서 가장 궁금한 건 ‘내가 실제로 내는 금액’이라고 보고, 최종가를 중심으로 크기·굵기 위계를 다시 세웠어요.</p>
+  <p><Todo label="피드백을 받아 시안을 고친 실제 과정이 있다면 여기에 기록" /></p>
+  <Hypothesis change="최종 결제 금액을 가장 크게 표시" effect="상품 간 가격 비교가 빨라지고 오해가 줄어듦" method="“조건에 맞는 가장 싼 상품 찾기” 과제로 두 화면의 소요 시간과 오답 수 비교" />
+</Case>
+
+<Case id="case-ad-source" title="원본 캡처 대신 재현 화면과 출처 표기" values={['책임']} before="분석 자료에 원본 앱 화면을 그대로 사용" after="분석에 필요한 구조만 다시 그리고 출처·캡처 시점을 표기">
+  <p>타사 화면을 다루는 만큼 인용 범위와 출처를 분명히 하는 것이 분석하는 사람의 책임이라고 생각했어요.</p>
+</Case>
+
+</div>
+
+</Section>
+
+<Section id="learned" n={7} title="배운 점">
+
+‘보여 주는 것’과 ‘보이는 것’은 다르다는 걸 배웠어요. 정보를 더하는 것보다, 반복을 줄이고 위계를 세우는 것이 중요한 정보를 눈에 띄게 하는 데 더 효과적일 수 있어요.
+
+개선 제안은 모두 이론에 근거한 가설이고, 실제 사용자로 효과를 측정하지는 않았어요. 다음에는 두 화면을 비교하는 짧은 과제로 찾는 시간과 정답률을 확인하고, 가능하다면 시선 추적처럼 주의를 직접 볼 수 있는 방법도 시도해 보고 싶어요.
+
+</Section>

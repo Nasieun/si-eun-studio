@@ -2,8 +2,129 @@
 title: "FLY&SPEAK — 기내 외국어 학습 서비스"
 order: 1
 question: "기내 시간을 의미 있는 학습으로 바꿀 수 있을까?"
-summary: "비행 중의 짧고 끊기는 시간에 맞춘 상황별 외국어 학습 서비스"
-placeholder: true
+summary: "비행 중의 짧고 자주 끊기는 시간에 맞춰, 도착지에서 바로 쓸 표현을 상황별로 연습하는 서비스예요."
+contribution: "사용 환경 분석, 학습 흐름 설계, 정보 구조와 홈 화면 UI 시안"
+skills: ["사용 환경 분석", "학습 흐름 설계", "정보 구조", "UI 구성"]
+purpose: "기내에서 흘려보내는 시간을 도착지에서 바로 쓸 외국어 연습 시간으로 바꾸기"
+audience: "해외 여행·출장을 앞두고 비행기에 탄 외국어 초급 학습자"
+period: null
+team: null
+role: ["사용 환경 분석", "학습 흐름 설계", "정보 구조", "UI 시안"]
+status: null
+aiUsage: ["웹사이트 구현", "초안 정리"]
 ---
 
-이 프로젝트의 상세 내용은 STEP 02에서 채워집니다.
+{/* TODO: 본문은 PRD 구조에 맞춘 초안입니다. 〔작성 필요〕 표시와 데모 데이터(src/data/demos/flyAndSpeak.ts)를 실제 자료로 교체하세요. */}
+
+import Section from '../../components/project/Section.astro';
+import Evidence from '../../components/project/Evidence.astro';
+import Decision from '../../components/project/Decision.astro';
+import Hypothesis from '../../components/project/Hypothesis.astro';
+import Case from '../../components/project/Case.astro';
+import DemoBlock from '../../components/project/DemoBlock.astro';
+import Todo from '../../components/Todo.astro';
+import FlyLearningFlow from '../../components/demos/FlyLearningFlow.tsx';
+import FlyHomeCompare from '../../components/demos/FlyHomeCompare.tsx';
+
+<Section id="problem" n={2} title="문제 발견">
+
+장거리 비행에서는 몇 시간이 주어지지만, 그 시간은 생각보다 학습에 쓰기 어려워요. 식사와 기내 방송으로 자주 끊기고, 인터넷 연결이 없거나 유료인 경우가 많고, 좁은 좌석에서는 휴대폰 하나로만 무언가를 해야 해요.
+
+그래서 기존 학습 앱을 열어도 강좌를 고르다 멈추거나, 연결이 필요한 기능에서 막히곤 해요. 정작 도착하자마자 필요한 승무원·입국 심사 대화는 연습하지 못한 채 내리게 돼요.
+
+</Section>
+
+<Section id="evidence" n={3} title="관찰과 근거">
+
+<div class="grid">
+  <Evidence kind="체험 기록" title="기내에서 학습이 끊기는 순간들">
+    <p>식사 제공, 기내 방송, 조명 변화처럼 학습을 멈추게 하는 순간이 비행 내내 반복돼요.</p>
+    <p><Todo label="실제 탑승 중 기록한 관찰 메모로 교체" /></p>
+  </Evidence>
+  <Evidence kind="관찰" title="연결이 없는 환경">
+    <p>기내 와이파이는 없거나 유료인 경우가 많아, 연결을 전제로 한 기능은 기내에서 쓸 수 없어요.</p>
+  </Evidence>
+  <Evidence kind="수업 이론" title="학습 내용과 사용 상황의 연결">
+    <p>바로 쓸 상황과 연결된 내용일수록 학습 동기가 높아진다는 관점을 바탕으로, 강좌 대신 ‘상황’ 단위로 내용을 묶었어요.</p>
+    <p><Todo label="적용한 수업·이론 이름 확인" /></p>
+  </Evidence>
+</div>
+
+</Section>
+
+<Section id="decisions" n={4} title="핵심 결정">
+
+<div style="display:grid;gap:16px">
+  <Decision title="학습 단위" chosen="기내·입국 ‘상황’ 단위 (승무원에게 요청하기, 입국 심사 준비 …)" alternative="일반 앱처럼 강좌 → 단원 → 레슨 단위">
+    <p>도착 직후 바로 쓸 대화를 연습하는 것이 목적이라, 고르는 단계 없이 상황 하나를 2~4분 안에 끝낼 수 있는 단위가 맞다고 판단했어요.</p>
+  </Decision>
+  <Decision title="연습 방식" chosen="핵심 표현 확인 후 2~3턴의 짧은 역할극" alternative="단어 카드 암기 중심">
+    <p>표현을 외우는 것보다 실제 대화 흐름 안에서 골라 말해 보는 경험이 도착지에서 더 쓸모 있다고 봤어요.</p>
+  </Decision>
+  <Decision title="연결 방식" chosen="출발 전 내려받아 오프라인으로 학습" alternative="스트리밍 방식">
+    <p>기내 연결 환경을 전제로 하면 핵심 기능이 막히기 때문에, 오프라인 상태를 기본값으로 설계했어요.</p>
+  </Decision>
+</div>
+
+</Section>
+
+<Section id="experience" n={5} title="결과 체험">
+
+상황을 하나 골라 핵심 표현을 보고, 짧은 역할극으로 답을 골라 보세요. 30초면 한 번 끝나요.
+
+<DemoBlock title="학습 흐름 — 상황 선택부터 완료까지" draftNote="상황 목록과 역할극 대본은 예시 초안이에요. 실제 시안 내용으로 교체가 필요해요.">
+  <FlyLearningFlow client:visible />
+  <Fragment slot="summary">
+    <ol>
+      <li><strong>상황 선택</strong> — 승무원에게 요청하기, 입국 심사 준비, 기내식 고르기 중 하나를 골라요.</li>
+      <li><strong>핵심 표현</strong> — 그 상황에서 꼭 쓰는 표현 2~3개를 뜻과 함께 봐요.</li>
+      <li><strong>역할극</strong> — 상대 대사에 맞는 답을 고르고, 바로 피드백을 받아요.</li>
+      <li><strong>완료</strong> — 연습한 표현을 다시 보고 다른 상황으로 넘어가요.</li>
+    </ol>
+  </Fragment>
+</DemoBlock>
+
+</Section>
+
+<Section id="before-after" n={6} title="개선 전후">
+
+초기 홈 화면과 간소화한 홈 화면을 나란히 비교해요. 버튼을 누르면 양쪽 화면의 해당 영역이 강조돼요.
+
+<DemoBlock title="홈 화면 전후 비교">
+  <FlyHomeCompare client:visible />
+  <Fragment slot="summary">
+    <ul>
+      <li><strong>정보 배치</strong> — 메뉴 6개를 기내에서 쓰는 3개로 줄였어요.</li>
+      <li><strong>학습 진입</strong> — 강좌 탐색 대신 ‘이어서 하기’ 한 번으로 시작해요.</li>
+      <li><strong>기내 환경 반영</strong> — 연결이 필요한 기능을 빼고 오프라인 상태를 먼저 보여 줘요.</li>
+    </ul>
+  </Fragment>
+</DemoBlock>
+
+<div style="display:grid;gap:16px;margin-top:32px">
+
+<Case id="case-fly-menu" title="홈 메뉴를 6개에서 3개로" values={['한결같음']} before="단어장·문법·회화·퀴즈·랭킹·커뮤니티가 같은 크기로 나열" after="상황 학습·표현 복습·저장한 표현 3개만 남김">
+  <p>고르는 데 시간을 쓰지 않게 하려고 기내 상황과 관계없는 메뉴를 덜어 냈어요. 메뉴 이름도 기능 이름(문법, 퀴즈) 대신 하는 일(상황 학습, 표현 복습)로 다듬었어요.</p>
+  <Hypothesis change="홈 화면의 메뉴를 6개에서 3개로 줄임" effect="기내에서 학습 시작까지 걸리는 시간이 줄어듦" method="5명에게 두 화면으로 학습 시작 과제를 주고 소요 시간 비교" />
+</Case>
+
+<Case id="case-fly-entry" title="‘이어서 하기’로 한 번에 시작" values={['성취감']} before="배너 아래 강좌 목록에서 강좌 → 단원 → 레슨 순으로 선택" after="첫 화면 맨 위 ‘이어서 하기’ 카드에 예상 소요 시간 표시">
+  <p>식사나 방송으로 끊겼다가 다시 열었을 때, 어디까지 했는지 찾지 않고 바로 이어 가는 흐름을 시안과 체험 가능한 데모로 만들었어요.</p>
+  <Hypothesis change="‘이어서 하기’ 카드를 홈 최상단에 배치" effect="학습이 끊긴 뒤 다시 시작하는 비율이 높아짐" method="중단 상황을 재현한 과제에서 두 화면의 재시작 소요 시간과 포기 수 비교" />
+</Case>
+
+<Case id="case-fly-offline" title="연결 없이 되는 기능만 첫 화면에" values={['책임']} before="검색·랭킹·커뮤니티 등 연결이 필요한 기능이 곳곳에 있음" after="‘오프라인 저장됨’ 상태를 맨 위에 두고 오프라인 기능만 배치">
+  <p>사용 환경의 제약(기내 연결 없음)을 먼저 인정하고, 눌렀는데 안 되는 경험을 화면 단계에서 막았어요. 오프라인 저장 용량 같은 남은 한계는 배운 점에 따로 적었어요.</p>
+</Case>
+
+</div>
+
+</Section>
+
+<Section id="learned" n={7} title="배운 점">
+
+같은 학습 내용이라도 ‘어디서, 얼마 동안, 어떤 방해 속에서’ 쓰는지에 따라 화면 구성이 완전히 달라진다는 것을 배웠어요.
+
+아직 실제 기내에서 사용자에게 테스트하지는 못했어요. 그래서 위의 개선안은 모두 ‘개선 가설’로 남겨 두었고, 다음에는 비행 상황을 재현한 짧은 과제로 학습 시작 시간과 재시작 비율을 비교해 보려고 해요. 오프라인 저장에 필요한 용량과, 상황 목록을 어떤 기준으로 늘릴지도 확인해야 할 부분이에요.
+
+</Section>

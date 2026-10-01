@@ -1,37 +1,271 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ComingSoon from '../../components/ComingSoon.astro';
 import ProjectThumb from '../../components/ProjectThumb.astro';
+import Todo from '../../components/Todo.astro';
+import Section from '../../components/project/Section.astro';
+import { url } from '../../lib/url';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects');
-  return projects.map((p) => ({ params: { slug: p.id }, props: { project: p } }));
+  const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+  return projects.map((p, i) => ({
+    params: { slug: p.id },
+    props: {
+      project: p,
+      prev: projects[(i - 1 + projects.length) % projects.length],
+      next: projects[(i + 1) % projects.length],
+    },
+  }));
 }
 
-const { project } = Astro.props;
+const { project, prev, next } = Astro.props;
 const { Content } = await render(project);
+const d = project.data;
+
+/** 템플릿 0~7 — 모든 프로젝트가 같은 순서·같은 id를 쓴다 */
+const TOC = [
+  { id: 'overview', label: '개요' },
+  { id: 'problem', label: '문제 발견' },
+  { id: 'evidence', label: '관찰과 근거' },
+  { id: 'decisions', label: '핵심 결정' },
+  { id: 'experience', label: '결과 체험' },
+  { id: 'before-after', label: '개선 전후' },
+  { id: 'learned', label: '배운 점' },
+];
 ---
 
-<BaseLayout title={project.data.title} description={project.data.summary}>
-  <div class="container">
-    <header class="page-head">
-      <p class="eyebrow">Project 0{project.data.order}</p>
-      <h1>{project.data.title}</h1>
-      <p>{project.data.summary}</p>
+<BaseLayout title={d.title} description={d.summary}>
+  <article class="container project">
+    <!-- 0. 히어로: 결과 이미지와 본인 기여도를 첫 화면에 -->
+    <header class="hero">
+      <div class="hero__text">
+        <p class="eyebrow">Project 0{d.order}</p>
+        <h1>{d.title}</h1>
+        <p class="hero__summary">{d.summary}</p>
+        <div class="hero__contrib">
+          <p class="hero__label">본인 기여도</p>
+          <p>{d.contribution}</p>
+        </div>
+        <ul class="badge-row plain" aria-label="핵심 역량">
+          {d.skills.map((s) => <li class="badge">{s}</li>)}
+        </ul>
+      </div>
+      <figure class="hero__media">
+        <ProjectThumb slug={project.id} />
+        <figcaption class="caption">대표 이미지 — 실제 결과 시안 이미지로 교체 예정</figcaption>
+      </figure>
     </header>
-    <ProjectThumb slug={project.id} class="cover" />
-    <div class="section">
-      <ComingSoon step="STEP 02">
-        <p>“{project.data.question}”</p>
+
+    <div class="layout">
+      <nav class="toc" aria-label="이 프로젝트 목차">
+        <p class="toc__title">목차</p>
+        <ol>
+          {
+            TOC.map((t, i) => (
+              <li>
+                <a href={`#${t.id}`}>
+                  <span aria-hidden="true">{i + 1}.</span> {t.label}
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+
+      <div class="body">
+        <Section id="overview" n={1} title="프로젝트 개요">
+          <div class="table-wrap">
+            <table class="meta">
+              <tbody>
+                <tr><th scope="row">목적</th><td>{d.purpose}</td></tr>
+                <tr><th scope="row">대상 사용자</th><td>{d.audience}</td></tr>
+                <tr><th scope="row">작업 기간</th><td>{d.period ?? <Todo label="작업 기간 입력 필요" />}</td></tr>
+                <tr><th scope="row">개인 / 팀</th><td>{d.team ?? <Todo label="개인·팀 여부 입력 필요" />}</td></tr>
+                <tr>
+                  <th scope="row">본인 역할</th>
+                  <td>{d.role.join(', ')}</td>
+                </tr>
+                <tr>
+                  <th scope="row">진행 상태</th>
+                  <td>{d.status ? <span class="badge">{d.status}</span> : <Todo label="진행 상태 선택 필요" />}</td>
+                </tr>
+                <tr>
+                  <th scope="row">AI 활용 범위</th>
+                  <td>
+                    {d.aiUsage.join(', ')}
+                    <p class="caption">AI는 제작과 정리를 도왔고, 문제 판단과 검증은 시은의 작업이에요.</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </Section>
+
         <Content />
-      </ComingSoon>
+
+        <nav class="pager" aria-label="다른 프로젝트">
+          <a class="card card--link pager__item" href={url(`/projects/${prev.id}`)} rel="prev">
+            <span class="caption">← 이전 프로젝트</span>
+            <span class="pager__title">{prev.data.title}</span>
+          </a>
+          <a class="card card--link pager__item pager__item--next" href={url(`/projects/${next.id}`)} rel="next">
+            <span class="caption">다음 프로젝트 →</span>
+            <span class="pager__title">{next.data.title}</span>
+          </a>
+        </nav>
+      </div>
     </div>
-  </div>
+  </article>
 </BaseLayout>
 
+<script>
+  // 앵커로 도착했을 때 해당 위치를 잠깐 강조 (가치 카드 → 수정 사례 이동 포함)
+  const flash = () => {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const el = id && document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('is-arrived');
+    void el.offsetWidth;
+    el.classList.add('is-arrived');
+  };
+  addEventListener('hashchange', flash);
+  flash();
+</script>
+
 <style>
-  .cover {
-    max-width: 640px;
+  .hero {
+    display: grid;
+    gap: var(--space-6);
+    padding-block: var(--space-7) var(--space-6);
+  }
+  @media (min-width: 1024px) {
+    .hero {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      align-items: center;
+      gap: var(--space-8);
+    }
+  }
+  .hero__text {
+    display: grid;
+    gap: var(--space-4);
+    justify-items: start;
+  }
+  .hero__summary {
+    font-size: calc(var(--fs-body) + 2px);
+    color: var(--text-secondary);
+  }
+  .hero__contrib {
+    padding: var(--space-3) var(--space-4);
+    border-left: 4px solid var(--accent-blue);
+    background: var(--surface);
+    border-radius: 0 var(--radius-control) var(--radius-control) 0;
+  }
+  .hero__label {
+    font-size: var(--fs-caption);
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+  .hero__media {
+    margin: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+  .plain {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .layout {
+    display: grid;
+    gap: var(--space-4);
+  }
+  @media (min-width: 1024px) {
+    .layout {
+      grid-template-columns: 200px minmax(0, 1fr);
+      gap: var(--space-7);
+    }
+  }
+
+  .toc {
+    font-size: 15px;
+  }
+  .toc__title {
+    font-size: var(--fs-caption);
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-2);
+  }
+  .toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-2);
+  }
+  .toc a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch);
+    padding: 0 var(--space-3);
+    border-radius: var(--radius-control);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    text-decoration: none;
+  }
+  .toc a:hover {
+    background: var(--accent-blue-soft);
+  }
+  @media (min-width: 1024px) {
+    .toc {
+      position: sticky;
+      top: calc(var(--header-h) + var(--space-5));
+      align-self: start;
+      padding-top: var(--space-7);
+    }
+    .toc ol {
+      flex-direction: column;
+    }
+    .toc a {
+      border: none;
+      background: none;
+      min-height: 40px;
+    }
+  }
+
+  .body {
+    min-width: 0;
+  }
+
+  .meta th {
+    width: 8em;
+    color: var(--text-secondary);
+  }
+  .meta td .caption {
+    margin-top: var(--space-1);
+  }
+
+  .pager {
+    display: grid;
+    gap: var(--space-4);
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--border);
+  }
+  @media (min-width: 768px) {
+    .pager {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .pager__item {
+    display: grid;
+    gap: var(--space-1);
+    text-decoration: none;
+  }
+  .pager__item--next {
+    text-align: right;
+  }
+  .pager__title {
+    font-weight: 700;
   }
 </style>

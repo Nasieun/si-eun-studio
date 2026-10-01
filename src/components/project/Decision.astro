@@ -1,0 +1,72 @@
+---
+/** 핵심 결정 — 선택한 것과 검토한 대안, 그리고 이유 */
+interface Props {
+  title: string;
+  chosen: string;
+  alternative: string;
+}
+const { title, chosen, alternative } = Astro.props;
+---
+
+<article class="card dec">
+  <h3 class="dec__title">{title}</h3>
+  <dl class="dec__pair">
+    <div class="dec__opt dec__opt--chosen">
+      <dt>선택</dt>
+      <dd>{chosen}</dd>
+    </div>
+    <div class="dec__opt">
+      <dt>검토한 대안</dt>
+      <dd>{alternative}</dd>
+    </div>
+  </dl>
+  <div class="dec__why">
+    <p class="dec__label">이유</p>
+    <slot />
+  </div>
+</article>
+
+<style>
+  .dec {
+    display: grid;
+    gap: var(--space-4);
+  }
+  .dec__title {
+    font-size: 19px;
+  }
+  .dec__pair {
+    margin: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+  @media (min-width: 768px) {
+    .dec__pair {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .dec__opt {
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-control);
+    border: 1px solid var(--border);
+  }
+  .dec__opt--chosen {
+    background: var(--accent-blue-soft);
+    border-color: var(--accent-blue);
+  }
+  .dec__opt dt {
+    font-size: var(--fs-caption);
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+  .dec__opt--chosen dt::before {
+    content: '✓ ';
+  }
+  .dec__opt dd {
+    margin: 0;
+  }
+  .dec__label {
+    font-size: var(--fs-caption);
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+</style>

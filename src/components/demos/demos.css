@@ -1,0 +1,420 @@
+/* 데모 공통 스타일 — 기본 컴포넌트(.tab, .explain, .hotspot, .device …)는 global.css에 있다 */
+
+.demo {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.demo-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.demo-reset {
+  font-size: 14px;
+}
+
+.demo-explain__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.demo-explain__head h4 {
+  margin: 0;
+}
+
+.demo-explain dl,
+.explain dl {
+  margin: 0;
+  display: grid;
+  gap: var(--space-2);
+  font-size: 15px;
+}
+
+.explain dt {
+  font-weight: 700;
+  font-size: var(--fs-caption);
+  color: var(--text-secondary);
+}
+
+.explain dd {
+  margin: 0;
+}
+
+/* 진행 표시 (단계) */
+.steps {
+  display: flex;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+}
+
+.steps li {
+  flex: 1;
+  display: grid;
+  gap: 6px;
+  color: var(--text-secondary);
+}
+
+.steps li::before {
+  content: '';
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+  transition: background-color var(--dur-base) var(--ease-out);
+}
+
+.steps li[data-done='true']::before {
+  background: var(--accent-blue);
+}
+
+.steps li[aria-current='step'] {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.steps li[aria-current='step']::before {
+  background: var(--text-primary);
+}
+
+/* 기기 화면 안의 작은 UI (시안 재현) */
+.mock {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 12px;
+  font-size: 11px;
+  line-height: 1.45;
+  color: #1f2d3d;
+  background: #fff;
+  overflow: hidden;
+}
+
+.mock__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.mock__region {
+  position: relative;
+  border-radius: 8px;
+  transition:
+    box-shadow var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out);
+}
+
+/* 선택한 영역 강조: 테두리 + 라벨(텍스트) — 색만으로 구분하지 않음 */
+.mock[data-focus] .mock__region {
+  opacity: 0.35;
+}
+
+.mock .mock__region[data-active='true'] {
+  opacity: 1;
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 4px var(--text-primary);
+}
+
+.mock__tag {
+  position: absolute;
+  top: -9px;
+  right: 6px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--text-primary);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 18px;
+}
+
+/* 학습 흐름 데모 */
+.chat {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.bubble {
+  max-width: 85%;
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.bubble--them {
+  background: #eef2f7;
+  justify-self: start;
+  border-bottom-left-radius: 4px;
+}
+
+.bubble--me {
+  background: var(--accent-blue);
+  justify-self: end;
+  border-bottom-right-radius: 4px;
+}
+
+.bubble small {
+  display: block;
+  color: #4a5d72;
+  font-size: 10.5px;
+}
+
+.mock-choice {
+  display: block;
+  width: 100%;
+  min-height: var(--touch);
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mock-choice:hover {
+  background: var(--accent-blue-soft);
+}
+
+.mock-card {
+  display: block;
+  width: 100%;
+  min-height: var(--touch);
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #f7f9fc;
+  text-align: left;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.mock-card:hover {
+  border-color: var(--text-primary);
+}
+
+.mock-card strong {
+  display: block;
+  font-size: 13px;
+}
+
+.mock-primary {
+  display: block;
+  width: 100%;
+  min-height: var(--touch);
+  margin-top: auto;
+  border: none;
+  border-radius: 12px;
+  background: var(--text-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.phrase {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #f7f9fc;
+  border: 1px solid var(--border);
+}
+
+.phrase strong {
+  display: block;
+  font-size: 12.5px;
+}
+
+.feedback {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 11.5px;
+  background: #f7f5fc;
+  border: 1px dashed #8f84c4;
+}
+
+/* 비교 뷰 안의 기기 프레임 */
+.compare .device {
+  max-width: 260px;
+}
+
+/* 승차 시뮬레이션 */
+.scene {
+  position: relative;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #eef3f9;
+}
+
+.scene svg {
+  width: 100%;
+  height: auto;
+}
+
+.scene .bus {
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scene .bus {
+    transition-duration: 700ms;
+  }
+}
+
+.tp-active {
+  filter: drop-shadow(0 0 6px rgba(32, 52, 74, 0.45));
+}
+
+.touch-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+@media (min-width: 768px) {
+  .touch-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.touch-list .tab {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.tp-num {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid var(--text-primary);
+  background: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* 핫스팟 데모 */
+.hs-layout {
+  display: grid;
+  gap: var(--space-5);
+}
+
+@media (min-width: 768px) {
+  .hs-layout {
+    grid-template-columns: 260px minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.hs-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.hs-list button {
+  width: 100%;
+  min-height: var(--touch);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: 8px 12px;
+  text-align: left;
+  border-radius: var(--radius-control);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.hs-list button:hover {
+  border-color: var(--border-strong);
+}
+
+.hs-list button[aria-pressed='true'] {
+  border-color: var(--text-primary);
+  background: var(--accent-blue-soft);
+  font-weight: 600;
+}
+
+.hs-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(32, 52, 74, 0.35);
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.hs-type--attention {
+  background: var(--hs-attention);
+}
+.hs-type--confusing {
+  background: var(--hs-confusing);
+}
+.hs-type--proposal {
+  background: var(--hs-proposal);
+}
+
+.hs-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hotspot__icon {
+  position: absolute;
+  top: -7px;
+  right: -9px;
+  box-shadow: 0 0 0 2px #fff;
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--text-primary);
+  color: #fff;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.source-note {
+  font-size: var(--fs-caption);
+  color: var(--text-secondary);
+}
+
+.scene .hotspot {
+  transition: left var(--dur-slow) var(--ease-out);
+}

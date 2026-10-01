@@ -1,0 +1,89 @@
+---
+/**
+ * 데모 + 텍스트 요약. 데모를 조작하지 않아도 핵심이 읽히도록 요약을 항상 함께 보여준다 (PRD STEP 02 · 3.0).
+ * 기본 슬롯 = 데모, summary 슬롯 = 텍스트 요약.
+ */
+interface Props {
+  title: string;
+  /** 데모 문구가 실제 시안이 아니라 예시 초안일 때 표시 */
+  draftNote?: string;
+}
+const { title, draftNote } = Astro.props;
+---
+
+<figure class="demo-block">
+  <figcaption class="demo-block__cap">
+    <span class="badge">인터랙티브 데모</span>
+    <span class="demo-block__title">{title}</span>
+  </figcaption>
+  <div class="demo-block__grid">
+    <div class="demo-block__demo"><slot /></div>
+    <aside class="demo-block__summary" aria-label={`${title} 텍스트 요약`}>
+      <p class="demo-block__label">조작하지 않고 읽기</p>
+      <slot name="summary" />
+    </aside>
+  </div>
+  {draftNote && <p class="caption demo-block__note"><span class="todo">{draftNote}</span></p>}
+</figure>
+
+<style>
+  .demo-block {
+    margin: var(--space-5) 0 0;
+    padding: var(--space-4);
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+  @media (min-width: 768px) {
+    .demo-block {
+      padding: var(--space-5);
+    }
+  }
+  .demo-block__cap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+  .demo-block__title {
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .demo-block__grid {
+    display: grid;
+    gap: var(--space-5);
+  }
+  @media (min-width: 1024px) {
+    .demo-block__grid {
+      grid-template-columns: minmax(0, 1fr) 280px;
+    }
+  }
+  .demo-block__demo {
+    min-width: 0;
+  }
+  .demo-block__summary {
+    padding: var(--space-4);
+    border-radius: var(--radius-control);
+    background: var(--bg);
+    font-size: 15px;
+    align-self: start;
+  }
+  .demo-block__summary :global(ul),
+  .demo-block__summary :global(ol) {
+    margin: 0;
+    padding-left: 1.2em;
+  }
+  .demo-block__summary :global(li + li) {
+    margin-top: var(--space-2);
+  }
+  .demo-block__label {
+    font-size: var(--fs-caption);
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-2);
+  }
+  .demo-block__note {
+    margin-top: var(--space-4);
+  }
+</style>

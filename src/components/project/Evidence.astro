@@ -1,0 +1,29 @@
+---
+/** 관찰과 근거 카드 하나 — 체험 기록 / 수업 이론 / 조사 자료 */
+interface Props {
+  kind: '체험 기록' | '수업 이론' | '조사 자료' | '관찰';
+  title: string;
+}
+const { kind, title } = Astro.props;
+---
+
+<article class="card ev">
+  <span class="badge badge--outline">{kind}</span>
+  <h3 class="ev__title">{title}</h3>
+  <div class="ev__body"><slot /></div>
+</article>
+
+<style>
+  .ev {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+    justify-items: start;
+  }
+  .ev__title {
+    font-size: 18px;
+  }
+  .ev__body :global(p + p) {
+    margin-top: var(--space-2);
+  }
+</style>
