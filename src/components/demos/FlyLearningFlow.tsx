@@ -80,9 +80,9 @@ export default function FlyLearningFlow() {
 
             {phase === 'pick' && (
               <>
-                <h4 ref={headingRef} tabIndex={-1} style={{ fontSize: 14 }}>
+                <h3 ref={headingRef} tabIndex={-1} style={{ fontSize: 14 }}>
                   지금 어떤 상황인가요?
-                </h4>
+                </h3>
                 {SITUATIONS.map((s) => (
                   <button key={s.id} type="button" className="mock-card" onClick={() => pick(s)}>
                     <strong>{s.title}</strong>
@@ -94,9 +94,9 @@ export default function FlyLearningFlow() {
 
             {phase === 'phrases' && situation && (
               <>
-                <h4 ref={headingRef} tabIndex={-1} style={{ fontSize: 14 }}>
+                <h3 ref={headingRef} tabIndex={-1} style={{ fontSize: 14 }}>
                   {situation.title} — 핵심 표현
-                </h4>
+                </h3>
                 {situation.phrases.map((p) => (
                   <div className="phrase" key={p.en} lang="en">
                     <strong>{p.en}</strong>
@@ -111,9 +111,9 @@ export default function FlyLearningFlow() {
 
             {phase === 'roleplay' && situation && (
               <>
-                <h4 ref={headingRef} tabIndex={-1} style={{ fontSize: 14 }}>
+                <h3 ref={headingRef} tabIndex={-1} style={{ fontSize: 14 }}>
                   역할극 {turn + 1} / {situation.turns.length}
-                </h4>
+                </h3>
                 <div className="chat">
                   {situation.turns.slice(0, turn + 1).map((t, ti) => (
                     <div key={ti} className="chat">
@@ -153,9 +153,9 @@ export default function FlyLearningFlow() {
 
             {phase === 'done' && situation && (
               <>
-                <h4 ref={headingRef} tabIndex={-1} style={{ fontSize: 14 }}>
+                <h3 ref={headingRef} tabIndex={-1} style={{ fontSize: 14 }}>
                   연습 완료 🎉
-                </h4>
+                </h3>
                 <p>오늘 연습한 표현</p>
                 {situation.phrases.map((p) => (
                   <div className="phrase" key={p.en} lang="en">

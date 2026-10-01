@@ -71,7 +71,7 @@ function MockBlock({ block }: { block: ScreenBlock }) {
             background: block.emphasis ? '#e3eef8' : 'transparent',
             fontSize: block.emphasis ? 11 : 8,
             fontWeight: block.emphasis ? 700 : 400,
-            color: block.emphasis ? '#20344a' : '#8a9bb0',
+            color: block.emphasis ? '#20344a' : '#4a5d72',
             ...em,
           }}
         >

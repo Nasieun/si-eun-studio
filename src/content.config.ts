@@ -36,4 +36,30 @@ const projects = defineCollection({
   }),
 });
 
-export const collections = { projects };
+/**
+ * 관찰과 탐구 — src/content/archive/<slug>.md 하나를 추가하면 /archive 에 카드가 하나 생긴다 (A-1).
+ */
+export const ARCHIVE_KINDS = ['보고서', '논문 분석', '콘텐츠 제작'] as const;
+
+const archive = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/archive' }),
+  schema: z.object({
+    title: z.string(),
+    kind: z.enum(ARCHIVE_KINDS),
+    order: z.number(),
+    /** 카드 요약 3줄 (A-2) */
+    observed: z.string(),
+    interpreted: z.string(),
+    implication: z.string(),
+    /** 관련 대표 프로젝트 slug */
+    related: z.array(z.string()).default([]),
+    /** 원문·출처 (논문은 원문 전체 대신 요약 + 링크) */
+    source: z.object({ label: z.string(), url: z.string().optional() }).nullable().default(null),
+    /** public/ 아래의 원문 파일 (PDF·카드뉴스 이미지) — 공개 허락을 받은 경우에만 */
+    files: z.array(z.object({ label: z.string(), path: z.string() })).default([]),
+    /** true면 요약이 확인 전 초안이라는 표시가 카드에 붙는다 */
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { projects, archive };

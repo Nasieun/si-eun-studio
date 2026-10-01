@@ -1,17 +1,155 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ComingSoon from '../components/ComingSoon.astro';
+import { VALUES } from '../data/values';
+import { url } from '../lib/url';
+
+const titles = Object.fromEntries((await getCollection('projects')).map((p) => [p.id, p.data.title.split(' — ')[0]]));
 ---
 
-<BaseLayout title="나의 설계 방식" description="책임·한결같음·자신감·성취감·열정, 다섯 가지 가치로 프로젝트를 읽는 경로입니다.">
+<BaseLayout title="나의 설계 방식" description="책임·한결같음·자신감·성취감·열정, 다섯 가지 가치가 실제 작업에서 어떤 수정으로 나타났는지 따라가는 페이지입니다.">
   <div class="container">
     <header class="page-head">
       <p class="eyebrow">Approach</p>
       <h1>나의 설계 방식</h1>
-      <p>다섯 가지 가치가 실제 작업에서 어떤 수정으로 나타났는지 따라가는 페이지예요.</p>
+      <p>다섯 가지 가치가 실제 작업에서 어떤 수정으로 나타났는지 따라가 보세요. 카드를 펼치면 해당 프로젝트의 수정 사례로 바로 이동할 수 있어요.</p>
     </header>
-    <ComingSoon step="STEP 03">
-      <p>가치 카드 5개(책임·한결같음·자신감·성취감·열정)와, 각 가치가 드러난 프로젝트의 수정 사례 링크가 들어올 자리예요.</p>
-    </ComingSoon>
+
+    <ul class="grid grid--3 values" role="list">
+      {
+        VALUES.map((v) => (
+          <li class="card value" id={v.id}>
+            <span class="badge badge--lavender value__tag">{v.name}</span>
+            <h2 class="value__action">{v.action}</h2>
+            <button
+              type="button"
+              class="btn value__toggle"
+              aria-expanded="false"
+              aria-controls={`${v.id}-cases`}
+              data-value-toggle
+            >
+              <span>관련 사례 {v.cases.length}개</span>
+              <span class="value__chev" aria-hidden="true">▾</span>
+            </button>
+            <ul class="value__cases" id={`${v.id}-cases`} role="list" hidden>
+              {v.cases.map((c) => (
+                <li>
+                  <a class="case-link" href={url(`/projects/${c.project}#${c.anchor}`)}>
+                    <span class="caption">{titles[c.project]}</span>
+                    <span class="case-link__title">{c.title}</span>
+                    <span class="case-link__change">{c.change}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </BaseLayout>
+
+<script>
+  const toggles = document.querySelectorAll<HTMLButtonElement>('[data-value-toggle]');
+  const setOpen = (btn: HTMLButtonElement, open: boolean) => {
+    btn.setAttribute('aria-expanded', String(open));
+    const panel = document.getElementById(btn.getAttribute('aria-controls')!);
+    if (panel) panel.hidden = !open;
+  };
+  toggles.forEach((btn) => btn.addEventListener('click', () => setOpen(btn, btn.getAttribute('aria-expanded') !== 'true')));
+
+  // /approach#책임-id 로 들어오면 해당 카드를 펼쳐 둔다 (프로젝트 페이지의 가치 태그에서 오는 경로)
+  const openFromHash = () => {
+    const card = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+    const btn = card?.querySelector<HTMLButtonElement>('[data-value-toggle]');
+    if (btn) setOpen(btn, true);
+  };
+  addEventListener('hashchange', openFromHash);
+  openFromHash();
+</script>
+
+<style>
+  .values {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: start;
+  }
+
+  .value {
+    display: grid;
+    gap: var(--space-4);
+    justify-items: start;
+  }
+
+  .value__tag {
+    font-size: 15px;
+    padding: 4px 14px;
+  }
+
+  .value__action {
+    font-size: 19px;
+    line-height: 1.55;
+  }
+
+  .value__toggle {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .value__chev {
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .value__toggle[aria-expanded='true'] {
+    background: var(--accent-blue-soft);
+    font-weight: 700;
+  }
+
+  .value__toggle[aria-expanded='true'] .value__chev {
+    transform: rotate(180deg);
+  }
+
+  .value__cases[hidden] {
+    display: none;
+  }
+
+  .value__cases {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .case-link {
+    display: grid;
+    gap: 2px;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-control);
+    border: 1px solid var(--border);
+    background: var(--bg);
+    text-decoration: none;
+  }
+
+  .case-link:hover {
+    border-color: var(--text-primary);
+    background: var(--accent-blue-soft);
+  }
+
+  .case-link__title {
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .case-link__title::after {
+    content: ' →';
+  }
+
+  .case-link__change {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+</style>

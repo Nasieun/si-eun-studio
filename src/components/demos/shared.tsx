@@ -6,7 +6,7 @@ export function ExplainPanel({ title, children, badge }: { title: string; childr
   return (
     <div className="explain" aria-live="polite" aria-atomic="true">
       <div className="demo-explain__head">
-        <h4>{title}</h4>
+        <h3>{title}</h3>
         {badge}
       </div>
       {children}

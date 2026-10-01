@@ -13,5 +13,7 @@ export default defineConfig({
   site,
   base,
   trailingSlash: 'ignore',
+  // 첫 화면을 막는 CSS 요청을 없애기 위해 CSS를 HTML에 넣는다 (모바일 LCP)
+  build: { inlineStylesheets: 'always' },
   integrations: [react(), mdx(), sitemap()],
 });

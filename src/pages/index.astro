@@ -143,15 +143,16 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.order -
   /* H-3: 마우스가 있는 큰 화면에서는 호버·포커스 때 미리보기가 드러난다.
      터치 기기·작은 화면에서는 항상 보인다 (내용이 숨지 않도록). */
   @media (hover: hover) and (min-width: 1024px) {
-    .problem__reveal {
-      opacity: 0.55;
+    /* 장식 이미지만 흐리게 — 프로젝트명 글자는 대비를 유지한다 */
+    .problem__reveal :global(.thumb) {
+      opacity: 0.5;
       transform: translateY(6px);
       transition:
         opacity var(--dur-slow) var(--ease-out),
         transform var(--dur-slow) var(--ease-out);
     }
-    .problem:hover .problem__reveal,
-    .problem:focus-within .problem__reveal {
+    .problem:hover .problem__reveal :global(.thumb),
+    .problem:focus-within .problem__reveal :global(.thumb) {
       opacity: 1;
       transform: none;
     }

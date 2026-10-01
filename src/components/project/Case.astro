@@ -13,13 +13,19 @@ interface Props {
   reconstructed?: boolean;
 }
 const { id, title, before, after, values = [], reconstructed = false } = Astro.props;
+import { VALUE_ID } from '../../data/values';
+import { url } from '../../lib/url';
 ---
 
 <article class="case card" id={id} aria-labelledby={`${id}-title`}>
   <header class="case__head">
     <h3 id={`${id}-title`}>{title}</h3>
     <div class="badge-row">
-      {values.map((v) => <span class="badge badge--lavender">{v}</span>)}
+      {values.map((v) => (
+        <a class="badge badge--lavender value-link" href={url(`/approach#${VALUE_ID[v]}`)} aria-label={`가치: ${v} — 나의 설계 방식에서 보기`}>
+          {v}
+        </a>
+      ))}
       {reconstructed && <span class="badge badge--outline">재구성</span>}
     </div>
   </header>
@@ -55,6 +61,20 @@ const { id, title, before, after, values = [], reconstructed = false } = Astro.p
   }
   .case__head h3 {
     font-size: 19px;
+  }
+  .value-link {
+    position: relative;
+    text-decoration: none;
+    min-height: 32px;
+  }
+  /* 눈에 보이는 알약은 작게 두고, 누르는 영역만 44px로 넓힌다 */
+  .value-link::after {
+    content: '';
+    position: absolute;
+    inset: -6px -2px;
+  }
+  .value-link:hover {
+    text-decoration: underline;
   }
   .case__ba {
     display: grid;

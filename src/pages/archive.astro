@@ -1,17 +1,170 @@
 ---
+import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ComingSoon from '../components/ComingSoon.astro';
+import Todo from '../components/Todo.astro';
+import { url } from '../lib/url';
+
+const projects = Object.fromEntries((await getCollection('projects')).map((p) => [p.id, p.data.title.split(' — ')[0]]));
+const records = await Promise.all(
+  (await getCollection('archive'))
+    .sort((a, b) => a.data.order - b.data.order)
+    .map(async (r) => ({ ...r, Content: (await render(r)).Content })),
+);
 ---
 
-<BaseLayout title="관찰과 탐구" description="대표작을 뒷받침하는 관찰·분석 기록을 모았습니다.">
+<BaseLayout title="관찰과 탐구" description="XR 체험 보고서, VR 멀미 논문 분석, 봉사 카드뉴스 — 대표작을 뒷받침하는 관찰과 분석 기록입니다.">
   <div class="container">
     <header class="page-head">
       <p class="eyebrow">Archive</p>
       <h1>관찰과 탐구</h1>
-      <p>무엇을 관찰했고, 어떻게 해석했고, 설계에 어떤 시사점이 있었는지 짧게 정리한 기록이에요.</p>
+      <p>무엇을 관찰했고, 어떻게 해석했고, 설계에 어떤 시사점이 있었는지 짧게 정리한 기록이에요. 펼치면 자세한 내용을 볼 수 있어요.</p>
     </header>
-    <ComingSoon step="STEP 03">
-      <p>XR 체험 보고서, VR 멀미 논문 분석, 봉사 카드뉴스 기록 카드가 들어올 자리예요.</p>
-    </ComingSoon>
+
+    <ul class="grid grid--3 records" role="list">
+      {
+        records.map((r) => (
+          <li class="card record" id={r.id}>
+            <div class="badge-row">
+              <span class="badge badge--outline">{r.data.kind}</span>
+              {r.data.draft && <Todo label="요약 초안 · 확인 필요" />}
+            </div>
+            <h2 class="record__title">{r.data.title}</h2>
+            <dl class="record__lines">
+              <div>
+                <dt>관찰</dt>
+                <dd>{r.data.observed}</dd>
+              </div>
+              <div>
+                <dt>해석</dt>
+                <dd>{r.data.interpreted}</dd>
+              </div>
+              <div>
+                <dt>설계 시사점</dt>
+                <dd>{r.data.implication}</dd>
+              </div>
+            </dl>
+
+            {r.data.related.length > 0 && (
+              <p class="caption record__related">
+                관련 프로젝트:{' '}
+                {r.data.related.map((slug, i) => (
+                  <>
+                    {i > 0 && ', '}
+                    <a href={url(`/projects/${slug}`)}>{projects[slug]}</a>
+                  </>
+                ))}
+              </p>
+            )}
+
+            <details class="record__more">
+              <summary>자세히 보기</summary>
+              <div class="record__body prose">
+                <r.Content />
+                {r.data.source && (
+                  <p class="caption">
+                    출처:{' '}
+                    {r.data.source.url ? (
+                      <a href={r.data.source.url} rel="noopener">
+                        {r.data.source.label}
+                      </a>
+                    ) : (
+                      r.data.source.label
+                    )}
+                  </p>
+                )}
+                {r.data.files.map((f) => (
+                  <p>
+                    <a class="btn" href={url(f.path)}>
+                      {f.label} 열기
+                    </a>
+                  </p>
+                ))}
+              </div>
+            </details>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </BaseLayout>
+
+<style>
+  .records {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: start;
+  }
+
+  .record {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .record__title {
+    font-size: 20px;
+  }
+
+  .record__lines {
+    margin: 0;
+    display: grid;
+    gap: var(--space-3);
+    font-size: 15px;
+  }
+
+  .record__lines dt {
+    font-size: var(--fs-caption);
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+
+  .record__lines dd {
+    margin: 0;
+  }
+
+  .record__related a {
+    display: inline-block;
+    padding-block: 10px;
+  }
+
+  .record__more {
+    border-top: 1px solid var(--border);
+  }
+
+  .record__more summary {
+    display: flex;
+    align-items: center;
+    min-height: var(--touch);
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .record__more summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .record__more summary::after {
+    content: '▾';
+    margin-left: auto;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .record__more[open] summary::after {
+    transform: rotate(180deg);
+  }
+
+  .record__body {
+    padding-top: var(--space-2);
+    font-size: 15px;
+  }
+
+  .record__body :global(h2) {
+    font-size: 16px;
+    margin-top: var(--space-4);
+  }
+
+  .record__body :global(ul) {
+    padding-left: 1.2em;
+  }
+</style>

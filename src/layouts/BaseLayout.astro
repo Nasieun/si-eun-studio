@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BackToTop from '../components/BackToTop.astro';
 import { SITE } from '../data/site';
+import { url } from '../lib/url';
 
 interface Props {
   /** 페이지 고유 제목 — '페이지 · 사이트명' 형태로 붙는다. 홈은 생략 */
@@ -14,6 +15,9 @@ interface Props {
 const { title, description = SITE.description } = Astro.props;
 const fullTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} — ${SITE.nameEn}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+/** 빌드 후 scripts/subset-font.mjs가 만드는 서브셋 글꼴 (개발 서버에서는 없어서 시스템 글꼴로 보인다) */
+const FONT_URL = url('/fonts/pretendard-subset.woff2');
+const ogImage = new URL(url('/og.png'), Astro.site);
 ---
 
 <!doctype html>
@@ -26,10 +30,26 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+    <link rel="sitemap" href={url('/sitemap-index.xml')} />
+
+    <!-- 공유 미리보기 (카카오톡·슬랙 등) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${SITE.name} — ${SITE.tagline}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- 웹폰트: 사이트에 쓰인 글자만 담은 한 파일. optional이라 첫 화면을 막지 않고, 늦게 오면 이번 방문은 시스템 글꼴로 보인다 -->
+    <link rel="preload" as="font" type="font/woff2" href={FONT_URL} crossorigin />
+    <style
+      set:html={`@font-face{font-family:'Pretendard Variable';font-weight:45 920;font-style:normal;font-display:optional;src:url('${FONT_URL}') format('woff2-variations'),url('${FONT_URL}') format('woff2');}`}
     />
     <slot name="head" />
   </head>
