@@ -28,7 +28,7 @@ test('홈 문제 카드를 Tab + Enter로 연다', async ({ page }) => {
     if (await page.evaluate(() => document.activeElement?.closest('.problem') != null)) break;
   }
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(/\/projects\/fly-and-speak$/);
+  await expect(page).toHaveURL(/\/projects\/fly-and-speak\/?$/);
 });
 
 test('가치 카드를 키보드로 펼치고 접는다', async ({ page }) => {

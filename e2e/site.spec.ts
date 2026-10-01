@@ -55,7 +55,7 @@ test.describe('링크 연결', () => {
       await page.goto('/');
       await expect(page.locator('.problem .card__link')).toHaveCount(3);
       await page.locator('.problem .card__link').nth(i).click();
-      await expect(page).toHaveURL(new RegExp(`/projects/${slug}$`));
+      await expect(page).toHaveURL(new RegExp(`/projects/${slug}/?$`));
       await expect(page.locator('#overview')).toBeVisible();
     }
   });
@@ -76,7 +76,7 @@ test.describe('링크 연결', () => {
   test('프로젝트의 가치 태그가 해당 가치 카드를 펼친 채로 연다', async ({ page }) => {
     await page.goto('/projects/fly-and-speak');
     await page.locator('#case-fly-offline .value-link').first().click();
-    await expect(page).toHaveURL(/\/approach#responsibility$/);
+    await expect(page).toHaveURL(/\/approach\/?#responsibility$/);
     await expect(page.locator('#responsibility [data-value-toggle]')).toHaveAttribute('aria-expanded', 'true');
     await expect(page.locator('#responsibility-cases')).toBeVisible();
   });

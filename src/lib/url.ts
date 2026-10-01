@@ -6,7 +6,11 @@
 export function url(path = '/'): string {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   if (/^(https?:|mailto:|tel:|#)/.test(path)) return path;
-  return `${base}${path.startsWith('/') ? path : `/${path}`}`;
+  const [p, hash] = path.split('#');
+  let full = `${base}${p.startsWith('/') ? p : `/${p}`}`;
+  // 페이지 주소는 끝에 / 를 붙인다 — GitHub Pages가 /about → /about/ 로 301 리다이렉트하는 왕복을 없앤다
+  if (!/\.[a-z0-9]+$/i.test(full) && !full.endsWith('/')) full += '/';
+  return hash !== undefined ? `${full}#${hash}` : full;
 }
 
 /** 현재 페이지 경로에서 base를 뗀 값 ('/projects/x') — 메뉴의 현재 위치 표시에 쓴다. */
