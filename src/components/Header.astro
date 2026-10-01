@@ -1,0 +1,220 @@
+---
+import { NAV, SITE } from '../data/site';
+import { url, stripBase } from '../lib/url';
+
+const current = stripBase(Astro.url.pathname);
+const isCurrent = (href: string) => current === href || current.startsWith(`${href}/`);
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="logo" href={url('/')} aria-label={`${SITE.name} 홈`}>
+      <span class="logo__en">{SITE.nameEn}</span>
+      <span class="logo__ko">{SITE.name}</span>
+    </a>
+
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-nav"
+      data-menu-toggle
+    >
+      <span class="menu-toggle__icon" aria-hidden="true"></span>
+      <span class="visually-hidden">메뉴</span>
+    </button>
+
+    <nav id="site-nav" class="site-nav" aria-label="주 메뉴" data-menu>
+      <ul>
+        {
+          NAV.map((item) => (
+            <li>
+              <a href={url(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+  if (toggle && menu) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      menu.classList.toggle('is-open', open);
+    };
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+    // 넓은 화면으로 바뀌면 열린 상태를 정리한다
+    matchMedia('(min-width: 768px)').addEventListener('change', (e) => e.matches && setOpen(false));
+  }
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(247, 248, 250, 0.94);
+    backdrop-filter: saturate(1.4) blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--header-h);
+    gap: var(--space-4);
+  }
+
+  .logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: var(--touch);
+    text-decoration: none;
+    line-height: 1.25;
+  }
+
+  .logo__en {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+  }
+
+  .logo__ko {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .menu-toggle {
+    display: grid;
+    place-items: center;
+    width: var(--touch);
+    height: var(--touch);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-control);
+    background: var(--surface);
+    cursor: pointer;
+  }
+
+  .menu-toggle__icon,
+  .menu-toggle__icon::before,
+  .menu-toggle__icon::after {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--text-primary);
+    transition: transform var(--dur-base) var(--ease-out), opacity var(--dur-fast);
+  }
+
+  .menu-toggle__icon {
+    position: relative;
+  }
+
+  .menu-toggle__icon::before,
+  .menu-toggle__icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+  }
+
+  .menu-toggle__icon::before {
+    top: -6px;
+  }
+  .menu-toggle__icon::after {
+    top: 6px;
+  }
+
+  .menu-toggle[aria-expanded='true'] .menu-toggle__icon {
+    background: transparent;
+  }
+  .menu-toggle[aria-expanded='true'] .menu-toggle__icon::before {
+    transform: translateY(6px) rotate(45deg);
+  }
+  .menu-toggle[aria-expanded='true'] .menu-toggle__icon::after {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  .site-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .site-nav.is-open {
+    display: block;
+  }
+
+  .site-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: var(--space-2) var(--gutter) var(--space-4);
+  }
+
+  .site-nav a {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 var(--space-3);
+    border-radius: var(--radius-control);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .site-nav a:hover {
+    background: var(--accent-blue-soft);
+  }
+
+  /* 현재 페이지: 면 색 + 굵기 + 밑줄 */
+  .site-nav a[aria-current='page'] {
+    font-weight: 700;
+    background: var(--accent-blue-soft);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+  }
+
+  @media (min-width: 768px) {
+    .menu-toggle {
+      display: none;
+    }
+
+    .site-nav,
+    .site-nav.is-open {
+      display: block;
+      position: static;
+      background: none;
+      border: none;
+      box-shadow: none;
+    }
+
+    .site-nav ul {
+      display: flex;
+      gap: var(--space-1);
+      padding: 0;
+    }
+
+    .site-nav a {
+      min-height: var(--touch);
+      font-size: 15px;
+    }
+  }
+</style>

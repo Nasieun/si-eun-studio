@@ -1,0 +1,80 @@
+---
+/**
+ * 프로젝트 대표 일러스트 (실제 결과 이미지가 준비되기 전 사용하는 단순한 도식).
+ * 실제 시안 이미지가 생기면 이 컴포넌트 대신 <img>로 교체한다.
+ */
+interface Props {
+  slug: string;
+  class?: string;
+}
+const { slug, class: className } = Astro.props;
+---
+
+<div class:list={['thumb', `thumb--${slug}`, className]} aria-hidden="true">
+  {
+    slug === 'fly-and-speak' && (
+      <svg viewBox="0 0 320 180">
+        <rect width="320" height="180" fill="#e3eef8" />
+        <path d="M0 140 Q80 120 160 135 T320 128 V180 H0Z" fill="#a9cbea" />
+        <g transform="translate(118 52) rotate(-12)">
+          <path d="M0 22 L70 18 L92 8 Q100 6 100 14 L98 24 L70 30 L0 30Z" fill="#20344a" />
+          <path d="M34 22 L22 0 L34 0 L56 21Z" fill="#20344a" />
+          <path d="M40 28 L30 48 L42 48 L60 29Z" fill="#20344a" />
+        </g>
+        <rect x="40" y="36" width="64" height="34" rx="10" fill="#fff" stroke="#20344a" stroke-width="2" />
+        <text x="72" y="58" text-anchor="middle" font-size="14" font-weight="700" fill="#20344a">Hello</text>
+        <rect x="214" y="82" width="70" height="34" rx="10" fill="#c7bfe8" />
+        <text x="249" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#20344a">안녕</text>
+      </svg>
+    )
+  }
+  {
+    slug === 'smart-boarding' && (
+      <svg viewBox="0 0 320 180">
+        <rect width="320" height="180" fill="#eeebf8" />
+        <rect x="0" y="138" width="320" height="42" fill="#c7bfe8" />
+        <rect x="40" y="148" width="90" height="10" rx="5" fill="#a9cbea" />
+        <rect x="30" y="50" width="8" height="90" fill="#20344a" />
+        <rect x="14" y="40" width="70" height="40" rx="6" fill="#fff" stroke="#20344a" stroke-width="2" />
+        <text x="49" y="65" text-anchor="middle" font-size="13" font-weight="700" fill="#20344a">472 · 2분</text>
+        <rect x="150" y="66" width="150" height="70" rx="14" fill="#a9cbea" stroke="#20344a" stroke-width="2" />
+        <rect x="162" y="78" width="30" height="24" rx="4" fill="#fff" />
+        <rect x="200" y="78" width="30" height="24" rx="4" fill="#fff" />
+        <rect x="238" y="78" width="30" height="24" rx="4" fill="#fff" />
+        <circle cx="180" cy="138" r="11" fill="#20344a" />
+        <circle cx="270" cy="138" r="11" fill="#20344a" />
+      </svg>
+    )
+  }
+  {
+    slug === 'ad-attention' && (
+      <svg viewBox="0 0 320 180">
+        <rect width="320" height="180" fill="#f4f6f9" />
+        <rect x="110" y="14" width="100" height="166" rx="14" fill="#fff" stroke="#20344a" stroke-width="2" />
+        <rect x="120" y="30" width="80" height="34" rx="6" fill="#a9cbea" />
+        <rect x="120" y="72" width="36" height="36" rx="6" fill="#e3eef8" />
+        <rect x="164" y="72" width="36" height="36" rx="6" fill="#e3eef8" />
+        <rect x="120" y="116" width="80" height="8" rx="4" fill="#d5dde6" />
+        <rect x="120" y="130" width="60" height="8" rx="4" fill="#d5dde6" />
+        <circle cx="160" cy="47" r="30" fill="none" stroke="#20344a" stroke-width="2" stroke-dasharray="5 5" />
+        <circle cx="60" cy="60" r="18" fill="#c7bfe8" />
+        <circle cx="54" cy="58" r="4" fill="#20344a" />
+        <circle cx="66" cy="58" r="4" fill="#20344a" />
+        <path d="M80 56 L118 46" stroke="#20344a" stroke-width="2" stroke-dasharray="3 4" />
+      </svg>
+    )
+  }
+</div>
+
+<style>
+  .thumb {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .thumb svg {
+    width: 100%;
+    height: auto;
+  }
+</style>

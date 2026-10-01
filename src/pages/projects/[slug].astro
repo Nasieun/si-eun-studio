@@ -1,0 +1,37 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ComingSoon from '../../components/ComingSoon.astro';
+import ProjectThumb from '../../components/ProjectThumb.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((p) => ({ params: { slug: p.id }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={project.data.title} description={project.data.summary}>
+  <div class="container">
+    <header class="page-head">
+      <p class="eyebrow">Project 0{project.data.order}</p>
+      <h1>{project.data.title}</h1>
+      <p>{project.data.summary}</p>
+    </header>
+    <ProjectThumb slug={project.id} class="cover" />
+    <div class="section">
+      <ComingSoon step="STEP 02">
+        <p>“{project.data.question}”</p>
+        <Content />
+      </ComingSoon>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .cover {
+    max-width: 640px;
+  }
+</style>

@@ -1,0 +1,10 @@
+---
+/** 실제 자료로 교체해야 하는 자리. 화면에 점선 상자로 보이고, `grep -r "<Todo"` 로 모두 찾을 수 있다. */
+interface Props {
+  /** 무엇을 채워야 하는지 */
+  label?: string;
+}
+const { label = '작성 필요' } = Astro.props;
+---
+
+<span class="todo">〔{label}<slot />〕</span>

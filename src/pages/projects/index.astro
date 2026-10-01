@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectThumb from '../../components/ProjectThumb.astro';
+import { url } from '../../lib/url';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="프로젝트" description="FLY&SPEAK, 스마트 승차 안내 시스템, 광고 속 주의와 지각 — 세 가지 대표 프로젝트입니다.">
+  <div class="container">
+    <header class="page-head">
+      <p class="eyebrow">Projects</p>
+      <h1>프로젝트</h1>
+      <p>세 프로젝트 모두 ‘문제 → 근거 → 결정 → 결과 → 개선 전후 → 배운 점’ 순서로 읽을 수 있어요.</p>
+    </header>
+
+    <ul class="grid grid--3 list" role="list">
+      {
+        projects.map((p, i) => (
+          <li class="card card--link item">
+            <ProjectThumb slug={p.id} />
+            <p class="eyebrow">Project 0{i + 1}</p>
+            <h2 class="item__title">
+              <a class="card__link" href={url(`/projects/${p.id}`)}>
+                {p.data.title}
+              </a>
+            </h2>
+            <p class="muted">{p.data.summary}</p>
+            <p class="item__q">“{p.data.question}”</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .item__title {
+    font-size: 20px;
+  }
+  .item__q {
+    margin-top: auto;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border);
+    font-size: 15px;
+  }
+</style>

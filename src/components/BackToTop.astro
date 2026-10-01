@@ -1,0 +1,43 @@
+<a class="to-top" href="#main" data-to-top aria-label="맨 위로" hidden>
+  <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+    <path d="M10 15V5M5 10l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+  </svg>
+</a>
+
+<script>
+  const btn = document.querySelector<HTMLAnchorElement>('[data-to-top]');
+  if (btn) {
+    const update = () => (btn.hidden = window.scrollY < 600);
+    addEventListener('scroll', update, { passive: true });
+    update();
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0 });
+      document.getElementById('main')?.focus({ preventScroll: true });
+    });
+  }
+</script>
+
+<style>
+  .to-top {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 40;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-lift);
+  }
+  .to-top:hover {
+    background: var(--accent-blue-soft);
+  }
+  .to-top[hidden] {
+    display: none;
+  }
+</style>
