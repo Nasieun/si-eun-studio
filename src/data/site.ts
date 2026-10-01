@@ -32,9 +32,8 @@ export type Contact = {
 };
 
 export const CONTACTS: Contact[] = [
-  { kind: 'email', label: '이메일', value: null }, // TODO: 공개할 이메일 주소
-  { kind: 'link', label: 'GitHub', value: 'https://github.com/Nasieun', display: 'github.com/Nasieun' },
-  { kind: 'link', label: '링크드인', value: null }, // TODO: 공개한다면 URL, 아니면 이 줄 삭제
+  { kind: 'email', label: '이메일', value: 'sieunsally@hanyang.ac.kr' }, // TODO: 공개할 이메일 주소
+  { kind: 'link', label: 'GitHub', value: 'https://github.com/Nasieun', display: 'github.com/Nasieun' }
 ];
 
 export const ABOUT = {
@@ -49,9 +48,9 @@ export const ABOUT = {
    * verified: false 인 항목은 '확인 필요' 표시가 붙습니다 — 직접 써 본 도구인지 확인 후 true로 바꾸거나 삭제하세요.
    */
   tools: [
-    { group: '기획·디자인', name: 'Figma', verified: false },
-    { group: '문서·정리', name: 'Notion', verified: false },
-    { group: '구현 보조', name: 'Claude Code (이 웹사이트 구현)', verified: true },
+    { group: '기획·디자인', name: 'Figma', verified: true },
+    { group: '문서·정리', name: 'Notion', verified: true },
+    { group: '구현 보조', name: 'Claude Code (웹사이트 구현)', verified: true },
   ],
   resumePdf: null as string | null, // P1: '/resume.pdf' 처럼 public/ 아래 파일 경로
 };
