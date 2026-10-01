@@ -51,6 +51,8 @@ grep -rn "Todo\|TODO" src
 
 - `src/data/site.ts` — 공개할 이메일·링크드인, 실제 사용한 도구(`verified`), 이력서 PDF
 - `src/content/projects/*.mdx` — 작업 기간·개인/팀·진행 상태(frontmatter의 `null`), 관찰 기록, 실제 수정 과정
+  - `status`: `완료` / `시안 단계` / `검증 예정` (영어 `completed` / `draft` / `planned`도 가능)
+  - `team`: `개인`(또는 `personal`, `1`), 팀이면 인원 숫자(`4` → “팀 (4명)”) 또는 자유 문구
 - `src/data/demos/*.ts` — 데모 문구(기내 상황·역할극 대본, 승차 단계별 접점 역할, 핫스팟 설명)는 PRD 구조에 맞춘 **예시 초안**입니다
 - `src/data/values.ts` — 가치–사례 연결(PRD STEP 03 · 1.3 표)은 STEP 02 사례로 만든 초안
 - `src/content/archive/*.md` — 기록 3개의 요약은 초안(`draft: true`), 본문·논문 서지 정보 필요. 원문 공개 허락을 받으면 `files`에 추가
